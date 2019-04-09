@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        #webglcanvas {
+            background: url(./images/bg4.jpg) no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="webglcanvas"></canvas>
+    <script src="https://cdn.bootcss.com/three.js/r83/three.min.js"></script>
+    <script>
+        var canvas = document.getElementById('webglcanvas'),    //获取canvas
+            group = new THREE.Group(),                          //建立一个组
+            scene = new THREE.Scene(),                          //建立场景
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000); //设置相机为 角度60度，宽高比，最近端Z轴为1,最远端Z轴为10000
+        
+            //下面这些组用来建立每个星球的父元素,以实现 八大行星不同速度的公转与自转
+        var group1 = new THREE.Group();
+            groupParent1 = new THREE.Group();
+            group2 = new THREE.Group();
+            groupParent2 = new THREE.Group();
+            group3 = new THREE.Group();
+            groupParent3 = new THREE.Group();
+            group4 = new THREE.Group();
+            groupParent4 = new THREE.Group();
+            group5 = new THREE.Group();
+            groupParent5 = new THREE.Group();
+            group6 = new THREE.Group();
+            groupParent6 = new THREE.Group();
+            group7 = new THREE.Group();
+            groupParent7 = new THREE.Group();
+            group8 = new THREE.Group();
+            groupParent8 = new THREE.Group();
+
+        renderer = new THREE.WebGLRenderer({    //定义渲染器
+            alpha: true,    //让背景透明,默认是黑色  以显示我们自己的背景图
+            canvas: canvas, //一个用来绘制输出的Canvas对象
+            antialias: true //抗锯齿
+        });
+        renderer.setClearAlpha(0);
+        renderer.setSize(window.innerWidth, window.innerHeight);    //设置渲染器的宽高
+        init();
+        Animation();
+        function init() {       //用来初始化的函数
+            scene.add(group);   //把组都添加到场景里
+
+            scene.add(groupParent1);
+            scene.add(groupParent2);
+            scene.add(groupParent3);
+            scene.add(groupParent4);
+            scene.add(groupParent5);
+            scene.add(groupParent6);
+            scene.add(groupParent7);
+            scene.add(groupParent8);
+
+            camera.position.z = 2000;   //调整相机位置
+            camera.position.y = 500;
+            var loader = new THREE.TextureLoader();/*材质  纹理加载器*/
+            // 太阳
+            loader.load('./images/sun1.jpg', function (texture) {     
+                var geometry = new THREE.SphereGeometry(250, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);        //网孔对象    第一个参数是几何模型(结构),第二参数是材料(外观)
+                group.add(mesh);//添加到组里
+            })
+            // 水星
+            loader.load('./images/water.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(25, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);
+                group1.position.x -= 300;
+                group1.add(mesh);
+                groupParent1.add(group1);
+            })
+            // 金星
+            loader.load('./images/jin.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(50, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);
+                group2.position.x -= 400;
+                group2.add(mesh);
+                groupParent2.add(group2);
+            })
+            // 地球
+            loader.load('./images/earth.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(52, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);
+                group3.position.x -= 530;
+                group3.add(mesh);
+                groupParent3.add(group3);
+            })
+            // 火星
+            loader.load('./images/fire1.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(34, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);
+                group4.position.x -= 634;
+                group4.add(mesh);
+                groupParent4.add(group4);
+            })
+            // 木星
+            loader.load('./images/mu.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(100, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);
+                group5.position.x -= 900;
+                group5.add(mesh);
+                groupParent5.add(group5);
+            })
+            // 土星
+            loader.load('./images/tu.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(90, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);
+                group6.position.x -= 1200;
+                group6.add(mesh);
+                groupParent6.add(group6);
+            })
+            // 天王星
+            loader.load('./images/tianwang.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(70, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);
+                group7.position.x -= 1500;
+                group7.add(mesh);
+                groupParent7.add(group7);
+            })
+            // 海王星
+            loader.load('./images/haiwang.jpg', function (texture) {
+                var geometry = new THREE.SphereGeometry(70, 20, 20)  //球型   
+                var material = new THREE.MeshBasicMaterial({ map: texture })  //材质  将图片解构成THREE能理解的材质
+                var mesh = new THREE.Mesh(geometry, material);      
+                group8.position.x -= 1800;
+                group8.add(mesh);
+                groupParent8.add(group8);
+            })
+        }
+
+        function render() {
+            renderer.render(scene, camera);
+            camera.lookAt(scene.position);  //让相机盯着场景的位置 场景始终在中间
+        }
+
+        function Animation() {
+            render();
+            selfRotation();
+            revolution();
+            requestAnimationFrame(Animation);
+            // scene.rotation.y += 0.04;    这里不使用整个场景旋转,以减少计算量
+        }
+        //设置公转
+        function revolution(){
+            groupParent1.rotation.y += 0.15;
+            groupParent2.rotation.y += 0.065;
+            groupParent3.rotation.y += 0.05;
+            groupParent4.rotation.y += 0.03;
+            groupParent5.rotation.y += 0.001; 
+            groupParent6.rotation.y += 0.02;
+            groupParent7.rotation.y += 0.0005;
+            groupParent8.rotation.y += 0.003;
+        }
+        //设置自转
+        function selfRotation(){
+            group.rotation.y += 0.04;
+            group1.rotation.y += 0.02;
+            group2.rotation.y -= 0.005;
+            group3.rotation.y += 1;
+            group4.rotation.y += 1;
+            group5.rotation.y += 1.5;
+            group6.rotation.y += 1.5;
+            group7.rotation.y -= 1.5;
+            group8.rotation.y += 1.2;
+        }
+    </script>
+</body>
+
+</html>
