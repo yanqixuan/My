@@ -1,0 +1,15 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="title">
+    <swiper indicator-dots="{{true}}" indicator-color="#ffffff" autoplay="{{true}}" circular="{{true}}" >
+      <block wx:for="{{headImgUrl}}">
+        <swiper-item >
+          <image src="{{item}}" />
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="title-button">
+      
+    </view>
+  </view>
+</view>
